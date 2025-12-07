@@ -144,46 +144,48 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchInput = document.getElementById("searchInput");
     const fileContent = document.getElementById("fileContent");
 
-    // Carica la lista file
-    fetch("files/pagine.json")
-        .then(res => res.json())
-        .then(files => {
-            renderSidebar(files);
+    const files = [
+        { "name": "Introduction to Cybersecurity", "path": "intro-cybersecurity.html" },
+        { "name": "Introduction to Pentesting", "path": "intro-pentesting.html" },
+        { "name": "Passive Reconnaissance", "path": "recon-passive.html" },
+        { "name": "Active Reconnaissance", "path": "recon-active.html" }
+    ];
 
-            // Ricerca files
-            searchInput.addEventListener("input", () => {
-                const q = searchInput.value.toLowerCase();
-                const filtered = files.filter(f => f.name.toLowerCase().includes(q));
-                renderSidebar(filtered);
-            });
-        });
+    renderSidebar(files);
 
-    // Disegna sidebar
+    searchInput.addEventListener("input", () => {
+        const q = searchInput.value.toLowerCase();
+        const filtered = files.filter(f => f.name.toLowerCase().includes(q));
+        renderSidebar(filtered);
+    });
+
     function renderSidebar(files) {
         sidebar.innerHTML = "";
         files.forEach(f => {
             const item = document.createElement("div");
             item.className = "nav-item";
             item.textContent = f.name;
-            item.onclick = () => loadFile(f.path);
+            item.onclick = () => {
+                // Rimuove active dagli altri
+                document.querySelectorAll(".nav-item").forEach(el => el.classList.remove("active"));
+                item.classList.add("active");
+                loadFile(f.path);
+            };
             sidebar.appendChild(item);
         });
     }
 
-    // Legge il file e lo interpreta
     async function loadFile(path) {
-        const response = await fetch("files/" + path);
-        const rawText = await response.text();
-        const html = parseContent(rawText);
-
-        fileContent.innerHTML = `
-            <div class="content">
-                ${html}
-            </div>
-        `;
+        try {
+            const response = await fetch("files/" + path);
+            const rawText = await response.text();
+            const html = parseContent(rawText);
+            fileContent.innerHTML = `<div class="content">${html}</div>`;
+        } catch(e) {
+            fileContent.innerHTML = `<p style="color:red;">Errore nel caricamento del file: ${path}</p>`;
+        }
     }
 
-    // TRADUTTORE PERSONALIZZATO
     function parseContent(text) {
         const lines = text.split("\n");
         let html = "";
@@ -191,8 +193,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         lines.forEach(line => {
             line = line.trimEnd();
-
-            // Toggle blocco codice
             if (line.startsWith("§")) {
                 if (!insideCode) {
                     html += "<pre><code>";
@@ -203,39 +203,30 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 return;
             }
-
             if (insideCode) {
                 html += line.replace(/</g, "&lt;") + "\n";
                 return;
             }
-
-            // ** → H2
             if (line.startsWith("**")) {
                 html += `<h2>${line.substring(2).trim()}</h2>`;
                 return;
             }
-
-            // * → H1
             if (line.startsWith("*")) {
                 html += `<h1>${line.substring(1).trim()}</h1>`;
                 return;
             }
-
-            // --- → linea
             if (line === "---") {
                 html += "<hr>";
                 return;
             }
-
-            // Paragrafo normale
             if (line.trim() !== "") {
                 html += `<p>${line}</p>`;
             }
         });
-
         return html;
     }
 });
+
 </script>
 
 </body>
