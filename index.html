@@ -245,7 +245,7 @@ function parseContent(text) {
                 html += "<ul>";
                 insideList = true;
             }
-            html += `<li><h2>${parseLinks(line.substring(2).trim())}</h2></li>`;
+            html += `<li><h2>${parseLinks(line.substring(4).trim())}</h2></li>`;
             return;
         }
         
