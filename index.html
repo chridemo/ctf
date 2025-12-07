@@ -161,6 +161,7 @@ editor.style.fontFamily = "monospace";
 editor.style.fontSize = "14px";
 editor.style.whiteSpace = "pre-wrap";
 editor.style.outline = "none";
+editor.style.overflowY = "auto";
 
 const saveBtn = document.createElement("button");
 saveBtn.textContent = "💾 Salva file";
@@ -177,13 +178,13 @@ fileContent.appendChild(saveBtn);
 
 // CARICA LISTA FILE
 fetch("files/pagine.json")
-    .then(res => res.json())
-    .then(files => populateSidebar(files))
-    .catch(err => console.error("Errore JSON:", err));
+  .then(res => res.json())
+  .then(files => populateSidebar(files))
+  .catch(err => console.error("Errore JSON:", err));
 
+// POPOLA SIDEBAR
 function populateSidebar(files) {
     sidebarNav.innerHTML = "";
-
     files.forEach(file => {
         const item = document.createElement("div");
         item.className = "nav-item";
@@ -198,61 +199,61 @@ function populateSidebar(files) {
     });
 }
 
-// CARICA FILE E METTI NELL’EDITOR
+// CARICA FILE NELL’EDITOR
 function loadEditableFile(path) {
     currentFileName = path;
-
     fetch("files/" + path)
-        .then(res => res.text())
-        .then(text => {
-            editor.innerHTML = parseCustomMarkup(text);
-            placeCaretAtEnd(editor);
-        })
-        .catch(err => {
-            console.error(err);
-            editor.innerHTML = "<p style='color:red'>Errore caricamento file</p>";
-        });
+      .then(res => res.text())
+      .then(text => {
+          editor.innerHTML = parseCustomMarkup(text);
+          placeCaretAtEnd(editor);
+      })
+      .catch(err => {
+          console.error(err);
+          editor.innerHTML = "<p style='color:red'>Errore caricamento file</p>";
+      });
 }
 
-// FORMATTAZIONE IN TEMPO REALE
-editor.addEventListener("input", () => {
-    const sel = window.getSelection();
-    const caretNode = sel.focusNode;
-    const caretOffset = sel.focusOffset;
+// PARSING SOLO AL PREMERE INVIO
+editor.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        const sel = window.getSelection();
+        const range = sel.getRangeAt(0);
+        const br = document.createElement("br");
+        range.insertNode(br);
+        range.setStartAfter(br);
+        sel.removeAllRanges();
+        sel.addRange(range);
 
-    // Otteniamo il testo puro
-    const text = editor.innerText.split("\n");
-    editor.innerHTML = parseCustomMarkup(text.join("\n"));
-
-    // Riposizioniamo caret
-    placeCaretAt(caretNode, caretOffset);
+        // Aggiorna solo la riga corrente
+        const lines = editor.innerText.split("\n");
+        const lastLine = lines[lines.length-1];
+        const formatted = parseCustomMarkup(lastLine);
+        // sostituisci l’ultima riga con markup
+        if (formatted) {
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = formatted;
+            const lastNode = editor.childNodes[editor.childNodes.length-1];
+            editor.replaceChild(tempDiv.firstChild, lastNode);
+        }
+    }
 });
 
 // PARSER MARKUP PERSONALIZZATO
-function parseCustomMarkup(text) {
-    const lines = text.split("\n");
-    let html = "";
-
-    lines.forEach(line => {
-        line = line.trim();
-        if (!line) {
-            html += "<br>";
-            return;
-        }
-        if (line.startsWith("**")) html += `<h2>${line.replace("**", "").trim()}</h2>`;
-        else if (line.startsWith("*")) html += `<h1>${line.replace("*", "").trim()}</h1>`;
-        else if (line.startsWith("§")) html += `<pre><code>${line.replace("§", "").trim()}</code></pre>`;
-        else if (line === "---") html += `<hr>`;
-        else html += `<p>${line}</p>`;
-    });
-
-    return html;
+function parseCustomMarkup(line) {
+    line = line.trim();
+    if (!line) return "<br>";
+    if (line.startsWith("**")) return `<h2>${line.replace("**", "").trim()}</h2>`;
+    if (line.startsWith("*")) return `<h1>${line.replace("*", "").trim()}</h1>`;
+    if (line.startsWith("§")) return `<pre><code>${line.replace("§", "").trim()}</code></pre>`;
+    if (line === "---") return "<hr>";
+    return `<p>${line}</p>`;
 }
 
 // SALVA FILE SU SERVER
 saveBtn.addEventListener("click", () => {
     if (!currentFileName) return alert("Apri prima un file.");
-
     fetch("http://localhost:3000/save-file", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -262,8 +263,8 @@ saveBtn.addEventListener("click", () => {
         })
     })
     .then(res => res.json())
-    .then(data => alert("✔ File salvato!"))
-    .catch(err => alert("❌ Errore salvataggio."));
+    .then(() => alert("✔ File salvato!"))
+    .catch(() => alert("❌ Errore salvataggio."));
 });
 
 // SET ACTIVE
@@ -280,23 +281,14 @@ searchInput.addEventListener("input", () => {
     });
 });
 
-// HELPERS CARET
+// CARET
 function placeCaretAtEnd(el) {
     el.focus();
     document.execCommand('selectAll', false, null);
     document.getSelection().collapseToEnd();
 }
-
-function placeCaretAt(node, offset) {
-    if (!node) return;
-    const sel = window.getSelection();
-    const range = document.createRange();
-    range.setStart(node, Math.min(offset, node.length || 0));
-    range.collapse(true);
-    sel.removeAllRanges();
-    sel.addRange(range);
-}
 </script>
+
 
 </body>
 </html>
