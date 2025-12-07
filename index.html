@@ -144,7 +144,7 @@ const sidebarNav = document.getElementById("sidebarNav");
 const searchInput = document.getElementById("searchInput");
 const fileContent = document.getElementById("fileContent");
 
-// CREO TEXTAREA PER EDITOR
+// CREA EDITOR UNA VOLTA
 const editorWrapper = document.createElement("div");
 editorWrapper.id = "editorWrapper";
 editorWrapper.style.marginBottom = "20px";
@@ -176,6 +176,12 @@ editorWrapper.appendChild(fileEditor);
 editorWrapper.appendChild(saveBtn);
 fileContent.appendChild(editorWrapper);
 
+// CREA DIV PER PREVIEW
+const previewDiv = document.createElement("div");
+previewDiv.id = "filePreview";
+previewDiv.className = "content";
+fileContent.appendChild(previewDiv);
+
 // CARICA IL JSON CON LA LISTA FILE
 fetch("files/pagine.json")
     .then(res => res.json())
@@ -191,7 +197,6 @@ fetch("files/pagine.json")
 // POPOLA LA SIDEBAR
 function populateSidebar(files) {
     sidebarNav.innerHTML = "";
-
     files.forEach(file => {
         const item = document.createElement("div");
         item.className = "nav-item";
@@ -211,38 +216,28 @@ function loadEditableFile(path) {
     fetch("files/" + path)
         .then(res => res.text())
         .then(text => {
+            removeEmptyState();
             fileEditor.value = text;
-            fileContentDisplay(parseCustomMarkup(text));
+            previewDiv.innerHTML = parseCustomMarkup(text);
         })
         .catch(err => {
             console.error("Errore nel caricamento file:", err);
-            fileContentDisplay("<h2>Errore</h2><p>Impossibile caricare il file.</p>");
+            previewDiv.innerHTML = "<h2>Errore</h2><p>Impossibile caricare il file.</p>";
         });
 }
 
-// AGGIORNA ANTEPRIMA
-saveBtn.addEventListener("click", () => {
-    const text = fileEditor.value;
-    fileContentDisplay(parseCustomMarkup(text));
-});
-
-// FUNZIONE PER MOSTRARE IL CONTENUTO NEL FILE-CONTENT
-function fileContentDisplay(html) {
-    // Rimuovo editorWrapper se presente (per evitare duplicazioni)
-    const existingEditor = document.getElementById("editorWrapper");
-    if (!existingEditor) fileContent.innerHTML = "";
-    // Inserisco il contenuto trasformato
-    let preview = document.getElementById("filePreview");
-    if (!preview) {
-        preview = document.createElement("div");
-        preview.id = "filePreview";
-        preview.className = "content";
-        fileContent.appendChild(preview);
-    }
-    preview.innerHTML = html;
+// RIMUOVE EMPTY STATE
+function removeEmptyState() {
+    const empty = fileContent.querySelector(".empty-state");
+    if (empty) empty.remove();
 }
 
-// FUNZIONE DI PARSING CUSTOM MARKUP
+// AGGIORNA PREVIEW
+saveBtn.addEventListener("click", () => {
+    previewDiv.innerHTML = parseCustomMarkup(fileEditor.value);
+});
+
+// PARSING CUSTOM MARKUP
 function parseCustomMarkup(text) {
     const lines = text.split("\n");
     let html = "";
@@ -251,13 +246,13 @@ function parseCustomMarkup(text) {
         line = line.trim();
         if (!line) return;
 
-        if (line.startsWith("**")) { // **Titolo -> h2
+        if (line.startsWith("**")) { 
             html += `<h2>${line.replace(/^\*\*/, "").trim()}</h2>`;
-        } else if (line.startsWith("*")) { // *Titolo -> h1
+        } else if (line.startsWith("*")) { 
             html += `<h1>${line.replace(/^\*/, "").trim()}</h1>`;
-        } else if (line.startsWith("§")) { // § -> riquadro
+        } else if (line.startsWith("§")) { 
             html += `<pre class="content"><code>${line.replace(/^§/, "").trim()}</code></pre>`;
-        } else if (line === "---") { // --- -> separatore
+        } else if (line === "---") { 
             html += `<hr>`;
         } else {
             html += `<p>${line}</p>`;
@@ -273,18 +268,14 @@ function setActive(activeItem) {
     activeItem.classList.add("active");
 }
 
-// RICERCA NELLA SIDEBAR
+// RICERCA SIDEBAR
 searchInput.addEventListener("input", () => {
     const query = searchInput.value.toLowerCase();
-
     document.querySelectorAll(".nav-item").forEach(item => {
-        if (item.textContent.toLowerCase().includes(query)) {
-            item.style.display = "flex";
-        } else {
-            item.style.display = "none";
-        }
+        item.style.display = item.textContent.toLowerCase().includes(query) ? "flex" : "none";
     });
 });
 </script>
+
 </body>
 </html>
