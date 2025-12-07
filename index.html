@@ -145,7 +145,7 @@ const searchInput = document.getElementById("searchInput");
 const fileContent = document.getElementById("fileContent");
 
 // CARICA IL JSON CON LA LISTA FILE
-fetch("files/pagine.json")
+fetch("/cyber-security/files/pagine.json")
     .then(res => res.json())
     .then(files => {
         window.filesList = files; 
