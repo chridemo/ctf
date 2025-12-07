@@ -188,11 +188,11 @@ function parseContent(text) {
         line = line.trimEnd();
         if(line.startsWith("§")) { html += insideCode ? "</code></pre>" : "<pre><code>"; insideCode=!insideCode; return; }
         if(insideCode) { html += line.replace(/</g,"&lt;")+"\n"; return; }
-        if(line.startsWith("-")) { if(!insideList){html+="<ul>";insideList=true;} html+=`<li>${parseLinks(line.substring(1).trim())}</li>`; return; }
         else if(insideList){ html+="</ul>"; insideList=false; }
         if(line.startsWith("**")) { html+=`<h2>${parseLinks(line.substring(2).trim())}</h2>`; return; }
         if(line.startsWith("*")) { html+=`<h1>${parseLinks(line.substring(1).trim())}</h1>`; return; }
         if(line==="---") { html+="<hr>"; return; }
+        if(line.startsWith("-")) { if(!insideList){html+="<ul>";insideList=true;} html+=`<li>${parseLinks(line.substring(1).trim())}</li>`; return; }
         if(line.trim()!=="") html+=`<p>${parseLinks(line.trim())}</p>`;
     });
     if(insideList) html+="</ul>";
