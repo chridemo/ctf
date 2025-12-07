@@ -138,171 +138,72 @@
         </main>
     </div>
 
-    <script>
-        // DATABASE FILES
-        const files = {
-            'intro-cybersecurity': {
-                category: 'Introduction',
-                title: 'Introduction to Cybersecurity',
-                content: `<div class="content"><h2>What is Cybersecurity?</h2><p>Cybersecurity is the practice of protecting systems...</p></div>`
-            },
-            'intro-pentesting': {
-                category: 'Introduction',
-                title: 'Introduction to Penetration Testing',
-                content: `<div class="content"><h2>What is Penetration Testing?</h2><p>Penetration testing (pentesting) is an authorized simulated cyberattack...</p></div>`
-            },
-            'recon-passive': {
-                category: 'Reconnaissance',
-                title: 'Passive Reconnaissance',
-                content: `<div class="content"><h2>Overview</h2><p>Passive reconnaissance involves gathering information without directly interacting with the target...</p></div>`
-            },
-            'recon-active': {
-                category: 'Reconnaissance',
-                title: 'Active Reconnaissance',
-                content: `<div class="content"><h2>Overview</h2><p>Active reconnaissance involves directly interacting with target systems...</p></div>`
-            },
-            'scanning-nmap': {
-                category: 'Scanning',
-                title: 'Nmap Complete Guide',
-                content: `<div class="content"><h2>Introduction</h2><p>Nmap (Network Mapper) is the industry standard...</p></div>`
-            },
-            'scanning-vuln': {
-                category: 'Scanning',
-                title: 'Vulnerability Scanning',
-                content: `<div class="content"><h2>Overview</h2><p>Vulnerability scanning identifies security weaknesses...</p></div>`
-            },
-            'exploit-web': {
-                category: 'Exploitation',
-                title: 'Web Application Exploitation',
-                content: `<div class="content"><h2>SQL Injection</h2><p>Example SQL Injection tests...</p></div>`
-            }
-        };
+    const fileList = [
+    {name: 'Intro Cybersecurity', file: 'intro-cybersecurity.html', category: 'Introduction'},
+    {name: 'Intro Penetration Testing', file: 'intro-pentesting.html', category: 'Introduction'},
+    {name: 'Passive Reconnaissance', file: 'recon-passive.html', category: 'Reconnaissance'},
+    {name: 'Active Reconnaissance', file: 'recon-active.html', category: 'Reconnaissance'},
+    // aggiungi tutti gli altri
+];
 
-        const sidebarNav = document.getElementById('sidebarNav');
-        const fileContent = document.getElementById('fileContent');
-        const searchInput = document.getElementById('searchInput');
-
-        function renderFileList(filter = '') {
-            sidebarNav.innerHTML = '';
-            const fileKeys = Object.keys(files);
-
-            const filteredFiles = fileKeys.filter(key => files[key].title.toLowerCase().includes(filter.toLowerCase()));
-
-            if (filteredFiles.length === 0) {
-                sidebarNav.innerHTML = '<p style="padding:10px 20px; color:var(--text-secondary);">No files found</p>';
-                return;
-            }
-
-            const categories = {};
-            filteredFiles.forEach(key => {
-                const category = files[key].category;
-                if (!categories[category]) categories[category] = [];
-                categories[category].push(key);
-            });
-
-            for (const category in categories) {
-                const section = document.createElement('div');
-                section.classList.add('nav-section');
-
-                const title = document.createElement('div');
-                title.classList.add('nav-section-title');
-                title.textContent = category;
-                section.appendChild(title);
-
-                categories[category].forEach(key => {
-                    const item = document.createElement('div');
-                    item.classList.add('nav-item');
-                    item.textContent = files[key].title;
-                    item.dataset.key = key;
-
-                    item.addEventListener('click', () => {
-                        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                        item.classList.add('active');
-                        fileContent.innerHTML = files[key].content;
-                    });
-
-                    section.appendChild(item);
-                });
-
-                sidebarNav.appendChild(section);
-            }
-        }
-
-        // Inizializza lista
-        renderFileList();
-
-        // Ricerca live
-        searchInput.addEventListener('input', (e) => renderFileList(e.target.value));
-    </script>
-    <script>
 const sidebarNav = document.getElementById('sidebarNav');
 const fileContent = document.getElementById('fileContent');
 const searchInput = document.getElementById('searchInput');
 
-// Funzione per creare la lista dei file
-function renderSidebar(filter = '') {
+// Carica la sidebar
+function loadSidebar(items) {
     sidebarNav.innerHTML = '';
-
-    // Raggruppa i file per categoria
     const categories = {};
-    for (const key in files) {
-        const file = files[key];
-        if (!file.title.toLowerCase().includes(filter.toLowerCase())) continue;
+    items.forEach(item => {
+        if(!categories[item.category]) categories[item.category] = [];
+        categories[item.category].push(item);
+    });
 
-        if (!categories[file.category]) categories[file.category] = [];
-        categories[file.category].push({ key, title: file.title });
-    }
-
-    // Crea HTML per ogni categoria
-    for (const category in categories) {
+    for(const cat in categories){
         const section = document.createElement('div');
         section.className = 'nav-section';
 
         const title = document.createElement('div');
         title.className = 'nav-section-title';
-        title.textContent = category;
+        title.textContent = cat;
         section.appendChild(title);
 
-        categories[category].forEach(file => {
-            const item = document.createElement('div');
-            item.className = 'nav-item';
-            item.textContent = file.title;
-            item.dataset.key = file.key;
-
-            // Click per aprire il file
-            item.addEventListener('click', () => {
-                openFile(file.key);
-            });
-
-            section.appendChild(item);
+        categories[cat].forEach(file => {
+            const navItem = document.createElement('div');
+            navItem.className = 'nav-item';
+            navItem.textContent = file.name;
+            navItem.addEventListener('click', () => loadFile(file.file, navItem));
+            section.appendChild(navItem);
         });
 
         sidebarNav.appendChild(section);
     }
 }
 
-// Funzione per aprire un file
-function openFile(key) {
-    // Rimuove active da tutti
-    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-
-    // Imposta active a quello cliccato
-    const activeItem = document.querySelector(`.nav-item[data-key='${key}']`);
-    if (activeItem) activeItem.classList.add('active');
-
-    // Mostra il contenuto
-    fileContent.innerHTML = files[key].content;
+// Carica un file HTML esterno
+function loadFile(path, navItem){
+    fetch(`files/${path}`)
+        .then(res => res.text())
+        .then(data => {
+            fileContent.innerHTML = data;
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            navItem.classList.add('active');
+        })
+        .catch(err => {
+            fileContent.innerHTML = `<div class="empty-state"><div class="empty-state-content"><h2>Errore</h2><p>Non è stato possibile caricare il file.</p></div></div>`;
+            console.error(err);
+        });
 }
 
 // Ricerca
 searchInput.addEventListener('input', () => {
-    const filter = searchInput.value;
-    renderSidebar(filter);
+    const val = searchInput.value.toLowerCase();
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.style.display = item.textContent.toLowerCase().includes(val) ? 'flex' : 'none';
+    });
 });
 
-// Inizializza sidebar all'avvio
-renderSidebar();
-</script>
-
+// Inizializza
+loadSidebar(fileList);
 </body>
 </html>
