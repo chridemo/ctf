@@ -146,7 +146,7 @@ const fileContent = document.getElementById("fileContent");
 
 let currentFileName = null;
 
-// CREA EDITOR “WORD-LIKE”
+// CREO EDITOR UNICO “WORD-LIKE”
 const editor = document.createElement("div");
 editor.id = "inlineEditor";
 editor.contentEditable = true;
@@ -163,6 +163,9 @@ editor.style.whiteSpace = "pre-wrap";
 editor.style.outline = "none";
 editor.style.overflowY = "auto";
 
+fileContent.appendChild(editor);
+
+// CREO BOTTONI
 const saveBtn = document.createElement("button");
 saveBtn.textContent = "💾 Salva file";
 saveBtn.style.marginTop = "10px";
@@ -172,15 +175,19 @@ saveBtn.style.color = "#fff";
 saveBtn.style.border = "1px solid #404040";
 saveBtn.style.borderRadius = "6px";
 saveBtn.style.cursor = "pointer";
-
-fileContent.appendChild(editor);
 fileContent.appendChild(saveBtn);
+
+// CREO DIV PER ANTEPRIMA FORMATTATA
+const previewDiv = document.createElement("div");
+previewDiv.id = "previewDiv";
+previewDiv.style.marginTop = "20px";
+fileContent.appendChild(previewDiv);
 
 // CARICA LISTA FILE
 fetch("files/pagine.json")
-  .then(res => res.json())
-  .then(files => populateSidebar(files))
-  .catch(err => console.error("Errore JSON:", err));
+    .then(res => res.json())
+    .then(files => populateSidebar(files))
+    .catch(err => console.error("Errore JSON:", err));
 
 // POPOLA SIDEBAR
 function populateSidebar(files) {
@@ -203,57 +210,46 @@ function populateSidebar(files) {
 function loadEditableFile(path) {
     currentFileName = path;
     fetch("files/" + path)
-      .then(res => res.text())
-      .then(text => {
-          editor.innerHTML = parseCustomMarkup(text);
-          placeCaretAtEnd(editor);
-      })
-      .catch(err => {
-          console.error(err);
-          editor.innerHTML = "<p style='color:red'>Errore caricamento file</p>";
-      });
+        .then(res => res.text())
+        .then(text => {
+            editor.innerText = text;       // TESTO PURO
+            updatePreview();               // AGGIORNA ANTEPRIMA
+        })
+        .catch(err => {
+            console.error(err);
+            editor.innerText = "Errore caricamento file";
+        });
 }
 
-// PARSING SOLO AL PREMERE INVIO
-editor.addEventListener("keydown", e => {
-    if (e.key === "Enter") {
-        e.preventDefault();
-        const sel = window.getSelection();
-        const range = sel.getRangeAt(0);
-        const br = document.createElement("br");
-        range.insertNode(br);
-        range.setStartAfter(br);
-        sel.removeAllRanges();
-        sel.addRange(range);
-
-        // Aggiorna solo la riga corrente
-        const lines = editor.innerText.split("\n");
-        const lastLine = lines[lines.length-1];
-        const formatted = parseCustomMarkup(lastLine);
-        // sostituisci l’ultima riga con markup
-        if (formatted) {
-            const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = formatted;
-            const lastNode = editor.childNodes[editor.childNodes.length-1];
-            editor.replaceChild(tempDiv.firstChild, lastNode);
-        }
-    }
-});
+// AGGIORNA ANTEPRIMA FORMATTATA
+function updatePreview() {
+    const rawText = editor.innerText;
+    previewDiv.innerHTML = parseCustomMarkup(rawText);
+}
 
 // PARSER MARKUP PERSONALIZZATO
-function parseCustomMarkup(line) {
-    line = line.trim();
-    if (!line) return "<br>";
-    if (line.startsWith("**")) return `<h2>${line.replace("**", "").trim()}</h2>`;
-    if (line.startsWith("*")) return `<h1>${line.replace("*", "").trim()}</h1>`;
-    if (line.startsWith("§")) return `<pre><code>${line.replace("§", "").trim()}</code></pre>`;
-    if (line === "---") return "<hr>";
-    return `<p>${line}</p>`;
+function parseCustomMarkup(text) {
+    const lines = text.split("\n");
+    let html = "";
+    lines.forEach(line => {
+        line = line.trim();
+        if (!line) { html += "<br>"; return; }
+        if (line.startsWith("**")) html += `<h2>${line.replace(/^\*\*/, "").trim()}</h2>`;
+        else if (line.startsWith("*")) html += `<h1>${line.replace(/^\*/, "").trim()}</h1>`;
+        else if (line.startsWith("§")) html += `<pre><code>${line.replace(/^§/, "").trim()}</code></pre>`;
+        else if (line === "---") html += "<hr>";
+        else html += `<p>${line}</p>`;
+    });
+    return html;
 }
+
+// AGGIORNA IN TEMPO REALE
+editor.addEventListener("input", updatePreview);
 
 // SALVA FILE SU SERVER
 saveBtn.addEventListener("click", () => {
     if (!currentFileName) return alert("Apri prima un file.");
+
     fetch("http://localhost:3000/save-file", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -263,8 +259,8 @@ saveBtn.addEventListener("click", () => {
         })
     })
     .then(res => res.json())
-    .then(() => alert("✔ File salvato!"))
-    .catch(() => alert("❌ Errore salvataggio."));
+    .then(data => alert("✔ File salvato!"))
+    .catch(err => alert("❌ Errore salvataggio."));
 });
 
 // SET ACTIVE
@@ -280,14 +276,8 @@ searchInput.addEventListener("input", () => {
         item.style.display = item.textContent.toLowerCase().includes(q) ? "flex" : "none";
     });
 });
-
-// CARET
-function placeCaretAtEnd(el) {
-    el.focus();
-    document.execCommand('selectAll', false, null);
-    document.getSelection().collapseToEnd();
-}
 </script>
+
 
 
 </body>
