@@ -1,6 +1,0 @@
-[
-    { "name": "Introduction to Cybersecurity", "path": "intro-cybersecurity.html" },
-    { "name": "Introduction to Pentesting", "path": "intro-pentesting.html" },
-    { "name": "Passive Reconnaissance", "path": "recon-passive.html" },
-    { "name": "Active Reconnaissance", "path": "recon-active.html" }
-]
