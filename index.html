@@ -245,9 +245,25 @@ function parseContent(text) {
                 html += "<ul>";
                 insideList = true;
             }
-            html += `<li><h2>${parseLinks(line.substring(4).trim())}</h2></li>`;
-            return;
+        
+            // Cattura il contenuto tra ** … **
+            const match = line.match(/- \*\*(.+?)\*\*(.*)/);
+        
+            if (match) {
+                const title = match[1].trim();
+                const after = match[2].trim();  
+        
+                html += `<li><h2>${parseLinks(title)}</h2>`;
+        
+                if (after.length > 0) {
+                    html += `<p>${parseLinks(after)}</p>`;
+                }
+        
+                html += `</li>`;
+                return;
+            }
         }
+
         
         if (line.startsWith("- ")) {
             if (!insideList) {
