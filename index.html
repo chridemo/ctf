@@ -140,11 +140,50 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    const editor = document.getElementById("editor");
-    const preview = document.getElementById("preview");
-    const saveBtn = document.getElementById("saveFile");
+    const sidebar = document.getElementById("sidebarNav");
+    const searchInput = document.getElementById("searchInput");
+    const fileContent = document.getElementById("fileContent");
 
-    // Funzione che converte il testo in HTML formattato
+    // Carica la lista file
+    fetch("files/pagine.json")
+        .then(res => res.json())
+        .then(files => {
+            renderSidebar(files);
+
+            // Ricerca files
+            searchInput.addEventListener("input", () => {
+                const q = searchInput.value.toLowerCase();
+                const filtered = files.filter(f => f.name.toLowerCase().includes(q));
+                renderSidebar(filtered);
+            });
+        });
+
+    // Disegna sidebar
+    function renderSidebar(files) {
+        sidebar.innerHTML = "";
+        files.forEach(f => {
+            const item = document.createElement("div");
+            item.className = "nav-item";
+            item.textContent = f.name;
+            item.onclick = () => loadFile(f.path);
+            sidebar.appendChild(item);
+        });
+    }
+
+    // Legge il file e lo interpreta
+    async function loadFile(path) {
+        const response = await fetch("files/" + path);
+        const rawText = await response.text();
+        const html = parseContent(rawText);
+
+        fileContent.innerHTML = `
+            <div class="content">
+                ${html}
+            </div>
+        `;
+    }
+
+    // TRADUTTORE PERSONALIZZATO
     function parseContent(text) {
         const lines = text.split("\n");
         let html = "";
@@ -153,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lines.forEach(line => {
             line = line.trimEnd();
 
-            // Blocchi di codice
+            // Toggle blocco codice
             if (line.startsWith("§")) {
                 if (!insideCode) {
                     html += "<pre><code>";
@@ -170,24 +209,25 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // TITOLI
+            // ** → H2
             if (line.startsWith("**")) {
                 html += `<h2>${line.substring(2).trim()}</h2>`;
                 return;
             }
 
+            // * → H1
             if (line.startsWith("*")) {
                 html += `<h1>${line.substring(1).trim()}</h1>`;
                 return;
             }
 
-            // LINEA
+            // --- → linea
             if (line === "---") {
                 html += "<hr>";
                 return;
             }
 
-            // Paragrafo
+            // Paragrafo normale
             if (line.trim() !== "") {
                 html += `<p>${line}</p>`;
             }
@@ -195,32 +235,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return html;
     }
-
-    // Aggiorna l’anteprima mentre scrivi
-    editor.addEventListener("input", () => {
-        preview.innerHTML = parseContent(editor.innerText);
-    });
-
-    // Bottone "Salva file"
-    saveBtn.addEventListener("click", async () => {
-        const rawText = editor.innerText;
-        const htmlReady = parseContent(rawText);
-
-        const filename = document.getElementById("currentFile").dataset.filename;
-
-        await fetch("/save", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                filename: filename,
-                content: rawText,     // salva anche il testo grezzo
-                rendered: htmlReady   // salva anche l'HTML già pronto
-            })
-        });
-
-        alert("File salvato con successo!");
-    });
 });
 </script>
+
 </body>
 </html>
