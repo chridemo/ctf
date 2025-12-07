@@ -150,17 +150,6 @@ function renderSidebar(listFiles) {
     });
 }
 
-function parseLinks(text) {
-    return text.replace(/\[\[(.+?)\]\]/g, (match, p1) => {
-        // Trova file sia per nome che per path
-        const file = files.find(f => f.name.toLowerCase() === p1.toLowerCase() || f.path.toLowerCase() === p1.toLowerCase());
-        if(file) {
-            return `<span class="link" onclick="loadFile('${file.path}','${file.name}')">${p1}</span>`;
-        }
-        return p1;
-    });
-}
-
 async function loadFile(path, highlightName=null) {
     try {
         const response = await fetch("files/" + path);
@@ -179,6 +168,16 @@ async function loadFile(path, highlightName=null) {
     }
 }
 
+function parseLinks(text) {
+    return text.replace(/\[\[(.+?)\]\]/g, (match, p1) => {
+        const file = files.find(f => f.name.toLowerCase() === p1.toLowerCase() || f.path.toLowerCase() === p1.toLowerCase());
+        if(file) {
+            return `<span class="link" onclick="loadFile('${file.path}','${file.name}')">${file.name}</span>`;
+        }
+        return p1;
+    });
+}
+    
 window.loadFile = loadFile;
     
 function parseContent(text) {
