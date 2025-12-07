@@ -139,16 +139,12 @@
     </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-    const sidebar = document.getElementById("sidebarNav");
-    const searchInput = document.getElementById("searchInput");
-    const fileContent = document.getElementById("fileContent");
-
-    const files = [
-    { "name": "Introduction to Cybersecurity", "path": "intro-cybersecurity.html" },
-    { "name": "Introduction to Pentesting", "path": "intro-pentesting.html" },
-    { "name": "Passive Reconnaissance", "path": "recon-passive.html" },
-    { "name": "Active Reconnaissance", "path": "recon-active.html" }
+// --- VARIABILI GLOBALI ---
+const files = [
+    { name: "Introduction to Cybersecurity", path: "intro-cybersecurity.html" },
+    { name: "Introduction to Pentesting", path: "intro-pentesting.html" },
+    { name: "Passive Reconnaissance", path: "recon-passive.html" },
+    { name: "Active Reconnaissance", path: "recon-active.html" }
 ];
 
 const sidebar = document.getElementById("sidebarNav");
@@ -156,20 +152,29 @@ const searchInput = document.getElementById("searchInput");
 const fileContent = document.getElementById("fileContent");
 
 // --- FUNZIONI GLOBALI ---
+function renderSidebar(listFiles) {
+    sidebar.innerHTML = "";
+    listFiles.forEach(f => {
+        const item = document.createElement("div");
+        item.className = "nav-item";
+        item.textContent = f.name;
+        item.onclick = () => loadFile(f.path, f.name);
+        sidebar.appendChild(item);
+    });
+}
+
 async function loadFile(path, highlightName=null) {
     try {
         const response = await fetch("files/" + path);
-        const rawText = await response.text();
-        const html = parseContent(rawText);
-        fileContent.innerHTML = `<div class="content">${html}</div>`;
-
+        const text = await response.text();
+        fileContent.innerHTML = `<div class="content">${parseContent(text)}</div>`;
         if (highlightName) {
-            document.querySelectorAll(".nav-item").forEach(el=>el.classList.remove("active"));
+            document.querySelectorAll(".nav-item").forEach(el => el.classList.remove("active"));
             const el = Array.from(document.querySelectorAll(".nav-item"))
                 .find(e => e.textContent === highlightName);
             if (el) el.classList.add("active");
         }
-    } catch(e) {
+    } catch (e) {
         fileContent.innerHTML = `<p style="color:red;">Errore nel caricamento del file: ${path}</p>`;
     }
 }
@@ -177,56 +182,41 @@ async function loadFile(path, highlightName=null) {
 function parseLinks(text) {
     return text.replace(/\[\[(.+?)\]\]/g, (match, p1) => {
         const file = files.find(f => f.name.toLowerCase() === p1.toLowerCase());
-        if (file) {
-            return `<span class="link" onclick="loadFile('${file.path}', '${file.name}')">${p1}</span>`;
-        } else return p1;
+        if (file) return `<span class="link" onclick="loadFile('${file.path}','${file.name}')">${p1}</span>`;
+        return p1;
     });
 }
 
 function parseContent(text) {
     const lines = text.split("\n");
-    let html = "", insideCode=false, insideList=false;
+    let html = "", insideCode = false, insideList = false;
 
     lines.forEach(line => {
         line = line.trimEnd();
-
         if (line.startsWith("§")) {
-            if (!insideCode) { html += "<pre><code>"; insideCode=true; } 
-            else { html += "</code></pre>"; insideCode=false; }
+            html += insideCode ? "</code></pre>" : "<pre><code>";
+            insideCode = !insideCode;
             return;
         }
-        if (insideCode) { html += line.replace(/</g,"&lt;")+"\n"; return; }
-
+        if (insideCode) { html += line.replace(/</g,"&lt;") + "\n"; return; }
         if (line.startsWith("-")) {
-            if (!insideList) { html += "<ul>"; insideList=true; }
+            if (!insideList) { html += "<ul>"; insideList = true; }
             html += `<li>${parseLinks(line.substring(1).trim())}</li>`;
             return;
-        } else if (insideList) { html += "</ul>"; insideList=false; }
-
+        } else if (insideList) { html += "</ul>"; insideList = false; }
         if (line.startsWith("**")) { html += `<h2>${parseLinks(line.substring(2).trim())}</h2>`; return; }
         if (line.startsWith("*")) { html += `<h1>${parseLinks(line.substring(1).trim())}</h1>`; return; }
-        if (line==="---") { html += "<hr>"; return; }
-        if (line.trim()!=="") { html += `<p>${parseLinks(line.trim())}</p>`; }
+        if (line === "---") { html += "<hr>"; return; }
+        if (line.trim() !== "") html += `<p>${parseLinks(line.trim())}</p>`;
     });
+
     if (insideList) html += "</ul>";
     return html;
-}
-
-function renderSidebar(listFiles) {
-    sidebar.innerHTML="";
-    listFiles.forEach(f => {
-        const item = document.createElement("div");
-        item.className="nav-item";
-        item.textContent=f.name;
-        item.onclick = ()=> loadFile(f.path, f.name);
-        sidebar.appendChild(item);
-    });
 }
 
 // --- INIT ---
 document.addEventListener("DOMContentLoaded", () => {
     renderSidebar(files);
-
     searchInput.addEventListener("input", () => {
         const q = searchInput.value.toLowerCase();
         const filtered = files.filter(f => f.name.toLowerCase().includes(q));
