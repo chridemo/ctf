@@ -129,12 +129,24 @@ body {
 <script>
 let files = [];
 
+const sidebar = document.getElementById("sidebarNav");
+const searchInput = document.getElementById("searchInput");
+const fileContent = document.getElementById("fileContent");
+
 fetch("pentest-workflow/pagine.json")
     .then(r => r.json())
     .then(json => {
         files = json;
+
         renderSidebar(files);
+
         if (files.length > 0) loadFile(files[0].path, files[0].name);
+
+        searchInput.addEventListener("input", () => {
+            const q = searchInput.value.toLowerCase();
+            const filtered = files.filter(f => f.name.toLowerCase().includes(q));
+            renderSidebar(filtered);
+        });
     });
 
 const sidebar = document.getElementById("sidebarNav");
