@@ -504,10 +504,7 @@ function runCat(f) {
     print("");
     print("<span class='info'>Type <span class='success'>help</span> to see available commands</span>");
     print("");
-}
-// Initialize
-printBanner();
-prompt();*/
+}*/
 
 function printBanner() {
     print("<span class='banner'>╭─────────────────────────────────────────╮</span>");
@@ -518,6 +515,9 @@ function printBanner() {
     print("");
 }
 
+printBanner();
+prompt();    
+    
 // Focus on load
 window.addEventListener("load", () => {
     const input = document.querySelector("input");
