@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>CTF Writeups Terminal</title>
+<title>chridemo</title>
 
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
@@ -491,7 +490,7 @@ function runCat(f) {
     }
 }
 
-function printBanner() {
+/*function printBanner() {
     const banner = String.raw`<pre style='font-family: monospace; white-space: pre; color: #6aff9a;'>
 ╭────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
 │    ____ _   _ ____  ___ ____  _____ __  __  ___      __        ______  ___ _____ _____ _   _ ____  ____    │
@@ -508,7 +507,16 @@ function printBanner() {
 }
 // Initialize
 printBanner();
-prompt();
+prompt();*/
+
+function printBanner() {
+    print("<span class='banner'>╭─────────────────────────────────────────╮</span>");
+    print("<span class='banner'>│  CTF Writeups Archive                  │</span>");
+    print("<span class='banner'>╰─────────────────────────────────────────╯</span>");
+    print("");
+    print("<span class='info'>Type <span class='success'>help</span> to see available commands</span>");
+    print("");
+}
 
 // Focus on load
 window.addEventListener("load", () => {
